@@ -6,7 +6,6 @@ Authors: Jonah Philion and Sanja Fidler
 
 import torch
 import matplotlib as mpl
-mpl.use('Agg')
 import matplotlib.pyplot as plt
 from PIL import Image
 import matplotlib.patches as mpatches

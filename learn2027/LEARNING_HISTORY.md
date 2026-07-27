@@ -1300,3 +1300,80 @@ models.py 把图像 Lift 到深度 frustum，再 Splat 到 BEV 网格，最后�
 train.py 负责把这套流程训练起来；
 explore.py 负责评估和可视化。
 ```
+
+## 2026-07-27：LSS step-through 学习偏好与当前目标
+
+当前学习目标：
+
+```text
+深刻理解 Lift-Splat-Shoot 项目中数据是如何一步一步被矩阵/张量变换处理的。
+重点不是先训练出结果，而是先看懂 forward 过程里的每一步 shape、坐标含义和可视化变化。
+```
+
+已经明确的学习方式偏好：
+
+```text
+把每一个主要 tensor 变换拆成 notebook 中单独的 code cell。
+每个 cell 只做一个主要步骤。
+每个步骤后面立刻显示该步骤的可视化。
+可视化可以是 heatmap、2D scatter、3D scatter、histogram、mask bar 等。
+```
+
+当前 notebook 入口：
+
+```text
+learn2027/lss_step_through.ipynb
+```
+
+该 notebook 后半部分已经按“一步一个 cell”展开 `LiftSplatShoot.forward()`：
+
+```text
+Geometry:
+  frustum -> undo post transform -> camera coordinates -> ego 3D coordinates
+
+Camera Lift:
+  images -> EfficientNet stem/blocks -> depth logits -> depth softmax
+  -> image feature -> depth probability * image feature -> frustum feature
+
+Splat:
+  frustum feature flatten -> ego xyz to voxel ijk -> rank -> sort
+  -> cumsum voxel sum -> scatter into BEV grid -> collapse Z
+
+BEV Encode:
+  BEV feature -> ResNet/upsample layers -> final segmentation logits
+```
+
+对项目理解时间的现实预估：
+
+```text
+1-2 天：
+  能看懂 LSS 主流程：Lift -> Splat -> BEV Encode。
+
+3-5 天：
+  能扎实解释源码中每个主要 tensor shape 为什么这样变。
+  能理解 get_geometry() 的矩阵变换和 voxel_pooling() 的 rank/sort/cumsum。
+
+1-2 周：
+  能深刻理解数据加载、相机内外参、post_rots/post_trans、BEV grid、loss、IoU。
+  能开始改 backbone、改 grid、接自己的数据。
+
+3-4 周：
+  到复现/改进级别。
+  能训练、debug IoU、定位数据/标定/坐标系/voxel pooling/网络表达能力问题。
+```
+
+后续学习建议顺序：
+
+```text
+1. 先重点看 Geometry。
+   这是 LSS 最核心、也最容易卡住的部分。
+
+2. 再看 Camera Lift。
+   重点理解 depth softmax * image feature。
+
+3. 再看 Splat。
+   重点理解 rank -> sort -> cumsum -> scatter。
+
+4. 最后看 BEV CNN、loss、train/eval。
+   这部分相对常规。
+```

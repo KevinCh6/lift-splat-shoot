@@ -13,7 +13,6 @@ from pyquaternion import Quaternion
 from PIL import Image
 from functools import reduce
 import matplotlib as mpl
-mpl.use('Agg')
 import matplotlib.pyplot as plt
 try:
     from nuscenes.utils.data_classes import LidarPointCloud

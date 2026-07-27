@@ -14,6 +14,14 @@ learn2027/src/
 learn2027/lss_step_through.ipynb
 ```
 
+Notebook 后半部分已经把 `LiftSplatShoot.forward()` 展开成：
+
+```text
+每一步源码代码
+每一步 tensor shape / 统计量
+每一步 2D / 3D / heatmap 可视化
+```
+
 ## 启动方式
 
 在仓库根目录运行：

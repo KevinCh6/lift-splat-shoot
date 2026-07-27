@@ -135,3 +135,7 @@ goodmodel.pt.bak
 storage/
 imagenet_pretrained/
 *.csv
+
+# Local learning configuration with private absolute paths.
+learn2027/local_config.py
+learn2027/.matplotlib/
